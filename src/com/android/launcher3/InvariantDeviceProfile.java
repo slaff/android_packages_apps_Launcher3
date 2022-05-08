@@ -48,6 +48,7 @@ import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import com.android.launcher3.lineage.icon.IconPackStore;
 import com.android.launcher3.model.DeviceGridState;
 import com.android.launcher3.provider.RestoreDbTask;
 import com.android.launcher3.util.DisplayController;
@@ -56,6 +57,9 @@ import com.android.launcher3.util.IntArray;
 import com.android.launcher3.util.MainThreadInitializedObject;
 import com.android.launcher3.util.Themes;
 import com.android.launcher3.util.WindowBounds;
+import com.android.quickstep.SystemUiProxy;
+
+import lineageos.providers.LineageSettings;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -123,6 +127,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
     public int numFolderColumns;
     public float[] iconSize;
     public float[] iconTextSize;
+    public String iconPack;
     public int iconBitmapSize;
     public int fillResIconDpi;
     public @DeviceType int deviceType;
@@ -178,6 +183,8 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
     private Context mContext;
 
     private final ArrayList<OnIDPChangeListener> mChangeListeners = new ArrayList<>();
+
+    private static boolean isTablet;
 
     @VisibleForTesting
     public InvariantDeviceProfile() {
@@ -299,7 +306,20 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
             case KEY_ICON_SIZE:
             case KEY_FONT_SIZE:
             case KEY_MAX_LINES:
+            case IconPackStore.KEY_ICON_PACK:
+            case DeviceProfile.KEY_PHONE_OVERVIEW_GRID:
                 onConfigChanged(mContext);
+                break;
+            case DeviceProfile.KEY_PHONE_TASKBAR:
+                // Create the illusion of this taking effect immediately
+                // Also needed because TaskbarManager inits before SystemUiProxy on start
+                boolean enabled = Utilities.getPrefs(mContext).getBoolean(DeviceProfile.KEY_PHONE_TASKBAR, isTablet);
+                LineageSettings.System.putInt(mContext.getContentResolver(),
+                        LineageSettings.System.ENABLE_TASKBAR, enabled ? 1 : 0);
+
+                SystemUiProxy.INSTANCE.get(mContext).setTaskbarEnabled(enabled);
+
+                onConfigChanged(mContext, true);
                 break;
         }
     }
@@ -344,6 +364,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
         for (int i = 1; i < iconSize.length; i++) {
             maxIconSize = Math.max(maxIconSize, iconSize[i]);
         }
+        iconPack = new IconPackStore(context).getCurrent();
         iconBitmapSize = ResourceUtils.pxFromDp(maxIconSize, metrics);
         fillResIconDpi = getLauncherIconDensity(iconBitmapSize);
 
@@ -421,11 +442,15 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
 
     private Object[] toModelState() {
         return new Object[]{
-                numColumns, numRows, numDatabaseHotseatIcons, iconBitmapSize, fillResIconDpi,
+                numColumns, numRows, numDatabaseHotseatIcons, iconPack, iconBitmapSize, fillResIconDpi,
                 numDatabaseAllAppsColumns, dbFile};
     }
 
     private void onConfigChanged(Context context) {
+        onConfigChanged(context, false);
+    }
+
+    private void onConfigChanged(Context context, boolean taskbarChanged) {
         Object[] oldState = toModelState();
 
         // Re-init grid
@@ -434,7 +459,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
 
         boolean modelPropsChanged = !Arrays.equals(oldState, toModelState());
         for (OnIDPChangeListener listener : mChangeListeners) {
-            listener.onIdpChanged(modelPropsChanged);
+            listener.onIdpChanged(modelPropsChanged, taskbarChanged);
         }
     }
 
@@ -565,7 +590,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
         int minWidthPx = Integer.MAX_VALUE;
         int minHeightPx = Integer.MAX_VALUE;
         for (WindowBounds bounds : displayInfo.supportedBounds) {
-            boolean isTablet = displayInfo.isTablet(bounds);
+            isTablet = displayInfo.isTablet(bounds);
             if (isTablet && deviceType == TYPE_MULTI_DISPLAY) {
                 // For split displays, take half width per page
                 minWidthPx = Math.min(minWidthPx, bounds.availableSize.x / 2);
@@ -682,7 +707,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
         /**
          * Called when the device provide changes
          */
-        void onIdpChanged(boolean modelPropertiesChanged);
+        void onIdpChanged(boolean modelPropertiesChanged, boolean taskbarChanged);
     }
 
 
