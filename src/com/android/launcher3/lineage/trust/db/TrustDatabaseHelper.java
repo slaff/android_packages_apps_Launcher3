@@ -78,7 +78,8 @@ public class TrustDatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PKGNAME, packageName);
             values.put(KEY_HIDDEN, 1);
 
-            int rows = db.update(TABLE_NAME, values, KEY_PKGNAME + " = ?", new String[]{KEY_PKGNAME});
+            int rows = db.update(TABLE_NAME, values, KEY_PKGNAME + " = ?",
+                    new String[]{KEY_PKGNAME});
             if (rows != 1) {
                 // Entry doesn't exist, create a new one
                 db.insertOrThrow(TABLE_NAME, null, values);
@@ -104,7 +105,8 @@ public class TrustDatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PKGNAME, packageName);
             values.put(KEY_PROTECTED, 1);
 
-            int rows = db.update(TABLE_NAME, values, KEY_PKGNAME + " = ?", new String[]{KEY_PKGNAME});
+            int rows = db.update(TABLE_NAME, values, KEY_PKGNAME + " = ?",
+                    new String[]{KEY_PKGNAME});
             if (rows != 1) {
                 // Entry doesn't exist, create a new one
                 db.insertOrThrow(TABLE_NAME, null, values);
@@ -161,7 +163,8 @@ public class TrustDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean isPackageHidden(@NonNull String packageName) {
-        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABLE_NAME, KEY_PKGNAME, KEY_HIDDEN);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABLE_NAME,
+                KEY_PKGNAME, KEY_HIDDEN);
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, new String[]{packageName, String.valueOf(1)});
         boolean result = false;
@@ -197,7 +200,8 @@ public class TrustDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean isPackageProtected(@NonNull String packageName) {
-        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABLE_NAME, KEY_PKGNAME, KEY_PROTECTED);
+        String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?", TABLE_NAME,
+                KEY_PKGNAME, KEY_PROTECTED);
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, new String[]{packageName, String.valueOf(1)});
         boolean result = false;

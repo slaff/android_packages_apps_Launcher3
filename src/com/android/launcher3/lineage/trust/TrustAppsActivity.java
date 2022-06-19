@@ -15,6 +15,9 @@
  */
 package com.android.launcher3.lineage.trust;
 
+import static com.android.launcher3.lineage.trust.db.TrustComponent.Kind.HIDDEN;
+import static com.android.launcher3.lineage.trust.db.TrustComponent.Kind.PROTECTED;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,9 +45,6 @@ import com.android.launcher3.lineage.trust.db.TrustComponent;
 import com.android.launcher3.lineage.trust.db.TrustDatabaseHelper;
 
 import java.util.List;
-
-import static com.android.launcher3.lineage.trust.db.TrustComponent.Kind.HIDDEN;
-import static com.android.launcher3.lineage.trust.db.TrustComponent.Kind.PROTECTED;
 
 public class TrustAppsActivity extends Activity implements
         TrustAppsAdapter.Listener,

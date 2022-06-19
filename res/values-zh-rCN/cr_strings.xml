@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">从主屏幕向右滑动时</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">在桌面上显示图标标签</string>
-    <string name="drawer_show_labels">在应用抽屉里显示图标标签</string>
+    <string name="desktop_show_labels">桌面图标标签</string>
+    <string name="drawer_show_labels">抽屉里的图标标签</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">值： <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">默认</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">谷歌镜头</string>
     <string name="label_voice_search">语音搜索</string>
     <string name="dock_search_title">谷歌搜索框</string>
-    <string name="dock_search_summary">在底部显示搜索框</string>
+    <string name="dock_search_summary">在底部 Dock 栏处显示搜索栏</string>
     <string name="dock_theme_title">主题图标</string>
     <string name="dock_theme_summary">为搜索栏使用主题图标</string>
     <string name="search_radius_title">圆角半径</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">默认</string>
     <string name="icon_pack_add">安装更多</string>
     <string name="icon_pack_no_market">没有可用的应用商店</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">下滑关闭应用信息</string>
-    <string name="app_info_source">来源</string>
-    <string name="app_info_source_system">系统</string>
-    <string name="app_info_last_update">上次更新</string>
-    <string name="app_info_version">版本</string>
-    <string name="app_info_more">更多</string>
     <!-- Taskbar -->
     <string name="pref_allow_phone_taskbar">使用任务栏</string>
     <string name="pref_allow_phone_taskbar_desc">随时随地打开和切换应用程序</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">显示最近应用的网格</string>
+    <string name="pref_allow_phone_overview_grid">网格式最近任务</string>
     <string name="pref_allow_phone_overview_grid_desc">概览中更多最近的应用</string>
+    <!-- Row Height -->
+    <string name="row_height_title">行高</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">顶部阴影</string>
 </resources>

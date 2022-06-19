@@ -16,6 +16,7 @@
 package com.android.launcher3.lineage.trust;
 
 import android.os.AsyncTask;
+
 import androidx.annotation.NonNull;
 
 import com.android.launcher3.lineage.trust.db.TrustComponent;
@@ -30,8 +31,8 @@ public class UpdateItemTask extends AsyncTask<TrustComponent, Void, Boolean> {
     private TrustComponent.Kind mKind;
 
     UpdateItemTask(@NonNull TrustDatabaseHelper dbHelper,
-                   @NonNull UpdateCallback callback,
-                   @NonNull TrustComponent.Kind kind) {
+            @NonNull UpdateCallback callback,
+            @NonNull TrustComponent.Kind kind) {
         mDbHelper = dbHelper;
         mCallback = callback;
         mKind = kind;

@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">Під час гортання вправо від головного екрану</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">Відображати підписи значків на робочому столі</string>
-    <string name="drawer_show_labels">Відображати підписи значків в меню</string>
+    <string name="desktop_show_labels">Назви іконок на робочому столі</string>
+    <string name="drawer_show_labels">Підписи іконок в меню програм</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Значення: <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">за замовчуванням</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">Google Ленс</string>
     <string name="label_voice_search">Голосовий пошук</string>
     <string name="dock_search_title">Панель пошуку Google</string>
-    <string name="dock_search_summary">Показувати панель пошуку в нижній панелі</string>
+    <string name="dock_search_summary">Рядок пошуку у нижній панелі</string>
     <string name="dock_theme_title">Іконки з темами</string>
     <string name="dock_theme_summary">Використовувати тематичні іконки для панелі пошуку</string>
     <string name="search_radius_title">Радіус округлення</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">За замовчанням</string>
     <string name="icon_pack_add">Встановити ще</string>
     <string name="icon_pack_no_market">Немає доступного магазину додатків</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">Проведіть вниз, щоб закрити інформацію про додаток</string>
-    <string name="app_info_source">Джерело</string>
-    <string name="app_info_source_system">Система</string>
-    <string name="app_info_last_update">Останнє оновлення</string>
-    <string name="app_info_version">Версія</string>
-    <string name="app_info_more">Більше</string>
     <!-- Taskbar -->
-    <string name="pref_allow_phone_taskbar">Use taskbar</string>
+    <string name="pref_allow_phone_taskbar">Використовувати панель завдань</string>
     <string name="pref_allow_phone_taskbar_desc">Для відкриття та перемикання додатків в будь-якому місці</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">Show grid of recent apps</string>
-    <string name="pref_allow_phone_overview_grid_desc">More recent apps in overview</string>
+    <string name="pref_allow_phone_overview_grid">Стиль відображення застосунків у вигляді сітки</string>
+    <string name="pref_allow_phone_overview_grid_desc">Більше останніх програм під час огляду</string>
+    <!-- Row Height -->
+    <string name="row_height_title">Висота рядка</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">Верхня тінь</string>
 </resources>

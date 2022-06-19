@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">Όταν σύρετε προς τα δεξιά από την κύρια Αρχική οθόνη</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">Εμφάνιση ετικετών εικονιδίων στην επιφάνεια εργασίας</string>
-    <string name="drawer_show_labels">Εμφάνιση ετικετών εικονιδίων στο συρτάρι εφαρμογών</string>
+    <string name="desktop_show_labels">Ετικέτες εικονιδίων στην επιφάνεια εργασίας</string>
+    <string name="drawer_show_labels">Ετικέτες εικονιδίων στο συρτάρι εφαρμογών</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Τιμή: <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">από προεπιλογή</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">Google Lens</string>
     <string name="label_voice_search">Φωνητική αναζήτηση</string>
     <string name="dock_search_title">Γραμμή αναζήτησης Google</string>
-    <string name="dock_search_summary">Εμφάνιση γραμμής αναζήτησης στην κάτω μπάρα εφαρμογών</string>
+    <string name="dock_search_summary">Γραμμή αναζήτησης στην κάτω μπάρα εφαρμογών</string>
     <string name="dock_theme_title">Θεματικά εικονίδια</string>
     <string name="dock_theme_summary">Χρήση θεματικών εικονιδίων για γραμμή αναζήτησης</string>
     <string name="search_radius_title">Γωνιακή ακτίνα</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">Προεπιλογή</string>
     <string name="icon_pack_add">Εγκαταστήστε περισσότερα</string>
     <string name="icon_pack_no_market">Δεν υπάρχει κανένα διαθέσιμο κατάστημα εφαρμογών</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">Σύρετε προς τα κάτω για κλείσιμο πληροφοριών εφαρμογής</string>
-    <string name="app_info_source">Πηγή</string>
-    <string name="app_info_source_system">Σύστημα</string>
-    <string name="app_info_last_update">Τελευταία ενημέρωση</string>
-    <string name="app_info_version">Έκδοση</string>
-    <string name="app_info_more">Περισσότερα</string>
     <!-- Taskbar -->
     <string name="pref_allow_phone_taskbar">Χρήση γραμμής εργασιών</string>
     <string name="pref_allow_phone_taskbar_desc">Για άνοιγμα και εναλλαγή εφαρμογών οπουδήποτε</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">Εμφάνιση πλέγματος πρόσφατων εφαρμογών</string>
+    <string name="pref_allow_phone_overview_grid">Πρόσφατες εφαρμογές σε στυλ πλέγματος</string>
     <string name="pref_allow_phone_overview_grid_desc">Περισσότερες πρόσφατες εφαρμογές στην επισκόπηση</string>
+    <!-- Row Height -->
+    <string name="row_height_title">Ύψος σειράς</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">Πάνω σκιά</string>
 </resources>

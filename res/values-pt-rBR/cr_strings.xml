@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">Ao deslizar para a direita na tela inicial</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">Mostrar rótulos dos ícones na tela inicial</string>
-    <string name="drawer_show_labels">Mostrar rótulos dos ícones na gaveta de aplicativos</string>
+    <string name="desktop_show_labels">Rótulos dos ícones na tela inicial</string>
+    <string name="drawer_show_labels">Rótulos dos ícones na gaveta de aplicativos</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Valor: <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">por padrão</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">Google Lens</string>
     <string name="label_voice_search">Pesquisa por voz</string>
     <string name="dock_search_title">Barra de pesquisa do Google</string>
-    <string name="dock_search_summary">Mostrar a barra de pesquisa na dock inferior</string>
+    <string name="dock_search_summary">Barra de pesquisa na dock</string>
     <string name="dock_theme_title">Ícones temáticos</string>
     <string name="dock_theme_summary">Usar ícones temáticos para a barra de pesquisa</string>
     <string name="search_radius_title">Raio das bordas</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">Padrão</string>
     <string name="icon_pack_add">Instalar mais</string>
     <string name="icon_pack_no_market">Não há uma loja de aplicativos disponível</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">Deslize para baixo para fechar as informações do aplicativo</string>
-    <string name="app_info_source">Fonte</string>
-    <string name="app_info_source_system">Sistema</string>
-    <string name="app_info_last_update">Última atualização</string>
-    <string name="app_info_version">Versão</string>
-    <string name="app_info_more">Mais</string>
     <!-- Taskbar -->
     <string name="pref_allow_phone_taskbar">Usar barra de tarefas</string>
     <string name="pref_allow_phone_taskbar_desc">Para abrir e alternar apps em qualquer lugar</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">Mostrar aplicativos recentes no estilo grade</string>
+    <string name="pref_allow_phone_overview_grid">Aplicativos recentes no estilo grade</string>
     <string name="pref_allow_phone_overview_grid_desc">Lista completa de apps recentes</string>
+    <!-- Row Height -->
+    <string name="row_height_title">Altura da linha</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">Sombra superior</string>
 </resources>

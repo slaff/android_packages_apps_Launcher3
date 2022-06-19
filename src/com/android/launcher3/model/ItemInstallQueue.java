@@ -106,7 +106,6 @@ public class ItemInstallQueue {
 
     @WorkerThread
     private void addToQueue(PendingInstallShortcutInfo info) {
-    	if (info == null) return;
         ensureQueueLoaded();
         if (!mItems.contains(info)) {
             mItems.add(info);

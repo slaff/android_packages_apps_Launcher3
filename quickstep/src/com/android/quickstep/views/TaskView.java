@@ -25,6 +25,7 @@ import static com.android.launcher3.Utilities.getDescendantCoordRelativeToAncest
 import static com.android.launcher3.anim.Interpolators.ACCEL_DEACCEL;
 import static com.android.launcher3.anim.Interpolators.FAST_OUT_SLOW_IN;
 import static com.android.launcher3.anim.Interpolators.LINEAR;
+import static com.android.launcher3.config.FeatureFlags.ENABLE_OVERVIEW_GRID;
 import static com.android.launcher3.config.FeatureFlags.ENABLE_QUICKSTEP_LIVE_TILE;
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_TASK_ICON_TAP_OR_LONGPRESS;
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_TASK_LAUNCH_TAP;
@@ -462,11 +463,15 @@ public class TaskView extends FrameLayout implements Reusable {
         return getItemInfo(mTask);
     }
 
-    protected WorkspaceItemInfo getItemInfo(Task task) {
-        ComponentKey componentKey = TaskUtils.getLaunchComponentKeyForTask(task.key);
+    protected WorkspaceItemInfo getItemInfo(@Nullable Task task) {
         WorkspaceItemInfo stubInfo = new WorkspaceItemInfo();
         stubInfo.itemType = LauncherSettings.Favorites.ITEM_TYPE_TASK;
         stubInfo.container = LauncherSettings.Favorites.CONTAINER_TASKSWITCHER;
+        if (task == null) {
+            return stubInfo;
+        }
+
+        ComponentKey componentKey = TaskUtils.getLaunchComponentKeyForTask(task.key);
         stubInfo.user = componentKey.user;
         stubInfo.intent = new Intent().setComponent(componentKey.componentName);
         stubInfo.title = task.title;
@@ -1050,6 +1055,12 @@ public class TaskView extends FrameLayout implements Reusable {
     }
 
     private void applyScale() {
+        /* This is now only for grid mode on tablets. Unconditionally calling this breaks
+         * our overview scrolling animation. Block this method, otherwise we have to
+         * introduce a multivalue scale fusion class to handle this. */
+        if (!mActivity.getDeviceProfile().isTablet || !ENABLE_OVERVIEW_GRID.get())
+            return;
+
         float scale = 1;
         scale *= getPersistentScale();
         scale *= mDismissScale;

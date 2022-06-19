@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">Wanneer je naar rechts veegt vanuit het startscherm</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">Toon pictogramlabels op het bureaublad</string>
-    <string name="drawer_show_labels">Toon pictogram labels in app overzicht</string>
+    <string name="desktop_show_labels">Pictogram labels op het bureaublad</string>
+    <string name="drawer_show_labels">Pictogram labels in app-overzicht</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Waarde: <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">standaard</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">Google Lens</string>
     <string name="label_voice_search">Spraakgestuurd zoeken</string>
     <string name="dock_search_title">Google zoekbalk</string>
-    <string name="dock_search_summary">Zoekbalk in het onderste dock weergeven</string>
+    <string name="dock_search_summary">Zoekbalk in het onderste dock</string>
     <string name="dock_theme_title">Thema pictogrammen</string>
     <string name="dock_theme_summary">Gebruik thema pictogrammen voor zoekbalk</string>
     <string name="search_radius_title">Hoekradius</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">Standaard</string>
     <string name="icon_pack_add">Meer installeren</string>
     <string name="icon_pack_no_market">Er is geen beschikbare app store</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">Veeg omlaag om app informatie te sluiten</string>
-    <string name="app_info_source">Bron</string>
-    <string name="app_info_source_system">Systeem</string>
-    <string name="app_info_last_update">Laatste update</string>
-    <string name="app_info_version">Versie</string>
-    <string name="app_info_more">Meer</string>
     <!-- Taskbar -->
     <string name="pref_allow_phone_taskbar">Gebruik taakbalk</string>
     <string name="pref_allow_phone_taskbar_desc">Voor het overal openen en wisselen van apps</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">Raster van recente apps weergeven</string>
+    <string name="pref_allow_phone_overview_grid">Recente apps in rasterstijl</string>
     <string name="pref_allow_phone_overview_grid_desc">Meer recente apps in het overzicht</string>
+    <!-- Row Height -->
+    <string name="row_height_title">Rijhoogte</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">Schaduw bovenzijde</string>
 </resources>

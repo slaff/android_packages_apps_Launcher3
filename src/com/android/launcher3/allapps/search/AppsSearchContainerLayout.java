@@ -87,17 +87,15 @@ public class AppsSearchContainerLayout extends ExtendedEditText
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mAppsView != null) {
+        if(mAppsView != null)
             mAppsView.getAppsStore().addUpdateListener(this);
-        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mAppsView != null) {
+        if(mAppsView != null)
             mAppsView.getAppsStore().removeUpdateListener(this);
-        }
     }
 
     @Override

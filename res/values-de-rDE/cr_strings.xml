@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">Wenn auf der ersten Seite nach rechts gewischt wird</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">Symbolbeschriftungen auf dem Startbildschirm anzeigen</string>
-    <string name="drawer_show_labels">Symbolbeschriftungen in der App-Übersicht anzeigen</string>
+    <string name="desktop_show_labels">Symbolbeschriftungen auf dem Startbildschirm</string>
+    <string name="drawer_show_labels">Symbolbeschriftungen in der Übersicht</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Wert: <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">Standardmäßig</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">Google Lens</string>
     <string name="label_voice_search">Sprachsuche</string>
     <string name="dock_search_title">Google-Suchleiste</string>
-    <string name="dock_search_summary">Suchleiste unten im Dock anzeigen</string>
+    <string name="dock_search_summary">Suchleiste im unteren Dock</string>
     <string name="dock_theme_title">Symboldesigns</string>
     <string name="dock_theme_summary">Symboldesigns in der Suchleiste verwenden</string>
     <string name="search_radius_title">Eckenradius</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">Standard</string>
     <string name="icon_pack_add">Weitere installieren</string>
     <string name="icon_pack_no_market">Es ist kein App-Store verfügbar</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">Nach unten wischen, um App-Informationen zu schließen</string>
-    <string name="app_info_source">Quelle</string>
-    <string name="app_info_source_system">System</string>
-    <string name="app_info_last_update">Letzte Aktualisierung</string>
-    <string name="app_info_version">Version</string>
-    <string name="app_info_more">Mehr</string>
     <!-- Taskbar -->
     <string name="pref_allow_phone_taskbar">Taskleiste verwenden</string>
     <string name="pref_allow_phone_taskbar_desc">Zum jederzeitigen Öffnen von und Wechseln zwischen Apps</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">App-Verlauf als Raster anzeigen</string>
+    <string name="pref_allow_phone_overview_grid">Raster-Stil für App-Verlauf</string>
     <string name="pref_allow_phone_overview_grid_desc">Im App-Verlauf mehr Apps anzeigen</string>
+    <!-- Row Height -->
+    <string name="row_height_title">Zeilenhöhe</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">Schatten oben</string>
 </resources>

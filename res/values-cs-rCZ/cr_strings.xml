@@ -39,8 +39,8 @@
     <string name="msg_minus_one_on_right">Při gestu přejetím vpravo z\u00a0domovské obrazovky</string>
     <!-- Folder titles -->
     <!-- Hide labels -->
-    <string name="desktop_show_labels">Zobrazit popisky ikon na ploše</string>
-    <string name="drawer_show_labels">Zobrazit popisky ikon v\u00a0menu aplikací</string>
+    <string name="desktop_show_labels">Popisky ikon na ploše</string>
+    <string name="drawer_show_labels">Popisky ikon v\u00a0seznamu aplikací</string>
     <!-- Custom seekbar -->
     <string name="custom_seekbar_value">Hodnota: <xliff:g id="v">%s</xliff:g></string>
     <string name="custom_seekbar_default_value">výchozí hodnota</string>
@@ -60,7 +60,7 @@
     <string name="label_lens">Google Lens</string>
     <string name="label_voice_search">Hlasové vyhledávání</string>
     <string name="dock_search_title">Vyhledávací panel Google</string>
-    <string name="dock_search_summary">Zobrazit vyhledávací panel ve spodním doku</string>
+    <string name="dock_search_summary">Vyhledávací lišta ve spodním doku</string>
     <string name="dock_theme_title">Ikony motivů</string>
     <string name="dock_theme_summary">Použít ikony motivů pro vyhledávací panel</string>
     <string name="search_radius_title">Poloměr rohu</string>
@@ -88,17 +88,14 @@
     <string name="icon_pack_default_label">Výchozí</string>
     <string name="icon_pack_add">Instalovat další</string>
     <string name="icon_pack_no_market">Není k\u00a0dispozici žádný obchod s\u00a0aplikacemi</string>
-    <!-- AppInfo -->
-    <string name="app_info_subtext">Přejetím dolů informace o\u00a0aplikaci zavřete</string>
-    <string name="app_info_source">Zdroj</string>
-    <string name="app_info_source_system">Systém</string>
-    <string name="app_info_last_update">Poslední aktualizace</string>
-    <string name="app_info_version">Verze</string>
-    <string name="app_info_more">Více</string>
     <!-- Taskbar -->
     <string name="pref_allow_phone_taskbar">Použít panel úloh</string>
     <string name="pref_allow_phone_taskbar_desc">Pro otevírání a\u00a0přepínání aplikací kdekoliv</string>
     <!-- Recent Grid -->
-    <string name="pref_allow_phone_overview_grid">Zobrazit mřížku nedávných aplikací</string>
+    <string name="pref_allow_phone_overview_grid">Styl mřížky nedávných aplikací</string>
     <string name="pref_allow_phone_overview_grid_desc">Více nedávných aplikací v\u00a0přehledu</string>
+    <!-- Row Height -->
+    <string name="row_height_title">Výška řádku</string>
+    <!-- Top shadow -->
+    <string name="show_top_shadow">Horní stín</string>
 </resources>

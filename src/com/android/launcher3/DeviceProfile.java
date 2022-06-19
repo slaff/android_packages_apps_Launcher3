@@ -51,6 +51,7 @@ public class DeviceProfile {
 
     public static final String KEY_PHONE_TASKBAR = "pref_allow_phone_taskbar";
     public static final String KEY_PHONE_OVERVIEW_GRID = "pref_allow_phone_overview_grid";
+    public static final String KEY_ROW_HEIGHT = "pref_row_height";
 
     private static final int DEFAULT_DOT_SIZE = 100;
     // Ratio of empty space, qsb should take up to appear visually centered.
@@ -179,6 +180,8 @@ public class DeviceProfile {
     public int allAppsLeftRightPadding;
     public final int numShownAllAppsColumns;
     public float allAppsIconTextSizePx;
+    private float allAppsCellHeightMultiplier;
+    private boolean allAppsIconText;
 
     // Overview
     public final boolean overviewShowAsGrid;
@@ -284,6 +287,10 @@ public class DeviceProfile {
                 isTaskbarPresent = false;
             }
         }
+
+        allAppsCellHeightMultiplier =
+                    (float) prefs.getInt(KEY_ROW_HEIGHT, 100) / 100F;
+        allAppsIconText = prefs.getBoolean(InvariantDeviceProfile.KEY_SHOW_DRAWER_LABELS, true);
 
         edgeMarginPx = res.getDimensionPixelSize(R.dimen.dynamic_grid_edge_margin);
 
@@ -606,8 +613,14 @@ public class DeviceProfile {
     public void autoResizeAllAppsCells() {
         int textHeight = Utilities.calculateTextHeight(allAppsIconTextSizePx);
         int topBottomPadding = textHeight;
-        allAppsCellHeightPx = allAppsIconSizePx + allAppsIconDrawablePaddingPx
-                + textHeight + (topBottomPadding * 2);
+        int baseCellHeight = allAppsIconSizePx + allAppsIconDrawablePaddingPx + textHeight + (topBottomPadding * 2);
+        allAppsCellHeightPx = (int) (baseCellHeight * allAppsCellHeightMultiplier);
+        if (!allAppsIconText) {
+            int leftRightPadding = desiredWorkspaceHorizontalMarginPx + cellLayoutPaddingLeftRightPx;
+            int drawerWidth = availableWidthPx - leftRightPadding * 2;
+            allAppsCellHeightPx = (int) (drawerWidth / inv.numAllAppsColumns * allAppsCellHeightMultiplier);
+            allAppsIconDrawablePaddingPx = 0;
+        }
     }
 
     private void updateAllAppsWidth() {
@@ -710,19 +723,12 @@ public class DeviceProfile {
         }
 
         // All apps
-        if (numShownAllAppsColumns != inv.numColumns) {
-            allAppsIconSizePx =
-                    pxFromDp(inv.iconSize[InvariantDeviceProfile.INDEX_ALL_APPS], mMetrics);
-            allAppsIconTextSizePx =
-                    pxFromSp(inv.iconTextSize[InvariantDeviceProfile.INDEX_ALL_APPS], mMetrics);
-            allAppsIconDrawablePaddingPx = iconDrawablePaddingOriginalPx;
-            autoResizeAllAppsCells();
-        } else {
-            allAppsIconSizePx = iconSizePx;
-            allAppsIconTextSizePx = iconTextSizePx;
-            allAppsIconDrawablePaddingPx = iconDrawablePaddingPx;
-            allAppsCellHeightPx = getCellSize().y;
-        }
+        allAppsIconSizePx =
+                pxFromDp(inv.iconSize[InvariantDeviceProfile.INDEX_ALL_APPS], mMetrics);
+        allAppsIconTextSizePx =
+                pxFromSp(inv.iconTextSize[InvariantDeviceProfile.INDEX_ALL_APPS], mMetrics);
+        allAppsIconDrawablePaddingPx = iconDrawablePaddingOriginalPx;
+        autoResizeAllAppsCells();
         allAppsCellWidthPx = allAppsIconSizePx + allAppsIconDrawablePaddingPx;
         updateAllAppsWidth();
 

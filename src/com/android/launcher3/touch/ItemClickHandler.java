@@ -336,6 +336,7 @@ public class ItemClickHandler {
             // Preload the icon to reduce latency b/w swapping the floating view with the original.
             FloatingIconView.fetchIcon(launcher, v, item, true /* isOpening */);
         }
+
         TrustDatabaseHelper db = TrustDatabaseHelper.getInstance(launcher);
         ComponentName cn = item.getTargetComponent();
         boolean isProtected = cn != null && db.isPackageProtected(cn.getPackageName());

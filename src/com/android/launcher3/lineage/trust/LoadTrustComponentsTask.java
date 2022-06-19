@@ -42,8 +42,8 @@ public class LoadTrustComponentsTask extends AsyncTask<Void, Integer, List<Trust
     private Callback mCallback;
 
     LoadTrustComponentsTask(@NonNull TrustDatabaseHelper dbHelper,
-                            @NonNull PackageManager packageManager,
-                            @NonNull Callback callback) {
+            @NonNull PackageManager packageManager,
+            @NonNull Callback callback) {
         mDbHelper = dbHelper;
         mPackageManager = packageManager;
         mCallback = callback;

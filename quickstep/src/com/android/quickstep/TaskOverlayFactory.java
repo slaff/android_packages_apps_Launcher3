@@ -87,19 +87,20 @@ public class TaskOverlayFactory implements ResourceBasedOverride {
                 shortcuts.add(shortcut);
             }
         }
+
+        // Add screenshot action to task menu.
+        SystemShortcut screenshotShortcut = TaskShortcutFactory.SCREENSHOT
+                .getShortcut(activity, taskContainer);
+        if (screenshotShortcut != null) {
+            shortcuts.add(screenshotShortcut);
+        }
+
         RecentsOrientedState orientedState = taskView.getRecentsView().getPagedViewOrientedState();
         boolean canLauncherRotate = orientedState.isRecentsActivityRotationAllowed();
         boolean isInLandscape = orientedState.getTouchRotation() != ROTATION_0;
 
         // Add overview actions to the menu when in in-place rotate landscape mode.
         if (!canLauncherRotate && isInLandscape) {
-            // Add screenshot action to task menu.
-            SystemShortcut screenshotShortcut = TaskShortcutFactory.SCREENSHOT
-                    .getShortcut(activity, taskContainer);
-            if (screenshotShortcut != null) {
-                shortcuts.add(screenshotShortcut);
-            }
-
             // Add modal action only if display orientation is the same as the device orientation.
             if (orientedState.getDisplayRotation() == ROTATION_0) {
                 SystemShortcut modalShortcut = TaskShortcutFactory.MODAL
@@ -118,9 +119,6 @@ public class TaskOverlayFactory implements ResourceBasedOverride {
      * * The taskView to add split options is already showing split screen tasks
      * * There aren't at least 2 tasks in overview to show split options for
      * * Device is in "Lock task mode"
-     * * The taskView to show split options for is the focused task AND we haven't started
-     *   scrolling in overview (if we haven't scrolled, there's a split overview action button so
-     *   we don't need this menu option)
      */
     private static void addSplitOptions(List<SystemShortcut> outShortcuts,
             BaseDraggingActivity activity, TaskView taskView, DeviceProfile deviceProfile) {
@@ -137,8 +135,7 @@ public class TaskOverlayFactory implements ResourceBasedOverride {
                 (ActivityManager) taskView.getContext().getSystemService(Context.ACTIVITY_SERVICE);
         boolean isLockTaskMode = activityManager.isInLockTaskMode();
 
-        if (taskViewHasMultipleTasks || notEnoughTasksToSplit || isLockTaskMode ||
-                (isFocusedTask && isTaskInExpectedScrollPosition)) {
+        if (taskViewHasMultipleTasks || notEnoughTasksToSplit || isLockTaskMode) {
             return;
         }
 
@@ -225,9 +222,11 @@ public class TaskOverlayFactory implements ResourceBasedOverride {
         public void endLiveTileMode(@NonNull Runnable callback) {
             if (ENABLE_QUICKSTEP_LIVE_TILE.get()) {
                 RecentsView recentsView = mThumbnailView.getTaskView().getRecentsView();
-                recentsView.switchToScreenshot(
-                        () -> recentsView.finishRecentsAnimation(true /* toRecents */,
-                                false /* shouldPip */, callback));
+                if (recentsView != null) {
+                    recentsView.switchToScreenshot(
+                            () -> recentsView.finishRecentsAnimation(true /* toRecents */,
+                                    false /* shouldPip */, callback));
+                }
             } else {
                 callback.run();
             }
