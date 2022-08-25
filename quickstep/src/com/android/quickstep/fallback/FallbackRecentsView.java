@@ -41,9 +41,11 @@ import com.android.launcher3.util.SplitConfigurationOptions;
 import com.android.quickstep.FallbackActivityInterface;
 import com.android.quickstep.GestureState;
 import com.android.quickstep.RecentsActivity;
+import com.android.quickstep.RotationTouchHelper;
 import com.android.quickstep.util.GroupTask;
 import com.android.quickstep.util.SplitSelectStateController;
 import com.android.quickstep.util.TaskViewSimulator;
+import com.android.quickstep.views.MemInfoView;
 import com.android.quickstep.views.OverviewActionsView;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
@@ -68,8 +70,9 @@ public class FallbackRecentsView extends RecentsView<RecentsActivity, RecentsSta
     }
 
     @Override
-    public void init(OverviewActionsView actionsView, SplitSelectStateController splitController) {
-        super.init(actionsView, splitController);
+    public void init(OverviewActionsView actionsView, SplitSelectStateController splitController,
+                        MemInfoView memInfoView) {
+        super.init(actionsView, splitController, memInfoView);
         setOverviewStateEnabled(true);
         setOverlayEnabled(true);
     }
@@ -85,11 +88,12 @@ public class FallbackRecentsView extends RecentsView<RecentsActivity, RecentsSta
      * to the home task. This allows us to handle quick-switch similarly to a quick-switching
      * from a foreground task.
      */
-    public void onGestureAnimationStartOnHome(RunningTaskInfo[] homeTaskInfo) {
+    public void onGestureAnimationStartOnHome(RunningTaskInfo[] homeTaskInfo,
+            RotationTouchHelper rotationTouchHelper) {
         // TODO(b/195607777) General fallback love, but this might be correct
         //  Home task should be defined as the front-most task info I think?
         mHomeTaskInfo = homeTaskInfo[0];
-        onGestureAnimationStart(homeTaskInfo);
+        onGestureAnimationStart(homeTaskInfo, rotationTouchHelper);
     }
 
     /**

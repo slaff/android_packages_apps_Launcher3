@@ -176,7 +176,7 @@ public final class TaskViewUtils {
                 ENABLE_QUICKSTEP_LIVE_TILE.get() && recentsView.getRunningTaskIndex() != -1;
         final RemoteAnimationTargets targets =
                 new RemoteAnimationTargets(appTargets, wallpaperTargets, nonAppTargets,
-                        inLiveTileMode ? MODE_CLOSING : MODE_OPENING);
+                        !ENABLE_SHELL_TRANSITIONS && inLiveTileMode ? MODE_CLOSING : MODE_OPENING);
         final RemoteAnimationTargetCompat navBarTarget = targets.getNavBarRemoteAnimationTarget();
 
         SurfaceTransactionApplier applier = new SurfaceTransactionApplier(v);
@@ -290,8 +290,8 @@ public final class TaskViewUtils {
             topMostSimulators = remoteTargetHandles;
         }
 
-        if (!skipViewChanges && parallaxCenterAndAdjacentTask && topMostSimulators != null &&
-                topMostSimulators.length > 0) {
+        if (!skipViewChanges && parallaxCenterAndAdjacentTask && topMostSimulators != null
+                && topMostSimulators.length > 0) {
             out.addFloat(v, VIEW_ALPHA, 1, 0, clampToProgress(LINEAR, 0.2f, 0.4f));
 
             RemoteTargetHandle[] simulatorCopies = topMostSimulators;
@@ -478,7 +478,7 @@ public final class TaskViewUtils {
         for (RemoteAnimationTargetCompat appTarget : appTargets) {
             final int taskId = appTarget.taskInfo != null ? appTarget.taskInfo.taskId : -1;
             final int mode = appTarget.mode;
-            final SurfaceControl leash = appTarget.leash.getSurfaceControl();
+            final SurfaceControl leash = appTarget.leash;
             if (leash == null) {
                 continue;
             }
@@ -493,7 +493,7 @@ public final class TaskViewUtils {
         }
 
         for (int i = 0; i < nonAppTargets.length; ++i) {
-            final SurfaceControl leash = appTargets[i].leash.getSurfaceControl();
+            final SurfaceControl leash = appTargets[i].leash;
             if (nonAppTargets[i].windowType == TYPE_DOCK_DIVIDER && leash != null) {
                 openingTargets.add(leash);
             }
@@ -652,7 +652,7 @@ public final class TaskViewUtils {
         boolean hasSurfaceToAnimate = false;
         for (int i = 0; i < nonApps.length; ++i) {
             final RemoteAnimationTargetCompat targ = nonApps[i];
-            final SurfaceControl leash = targ.leash.getSurfaceControl();
+            final SurfaceControl leash = targ.leash;
             if (targ.windowType == TYPE_DOCK_DIVIDER && leash != null) {
                 auxiliarySurfaces.add(leash);
                 hasSurfaceToAnimate = true;
@@ -666,7 +666,9 @@ public final class TaskViewUtils {
         dockFadeAnimator.addUpdateListener(valueAnimator -> {
             float progress = valueAnimator.getAnimatedFraction();
             for (SurfaceControl leash : auxiliarySurfaces) {
-                t.setAlpha(leash, shown ? progress : 1 - progress);
+                if (leash.isValid()) {
+                    t.setAlpha(leash, shown ? progress : 1 - progress);
+                }
             }
             t.apply();
         });
@@ -676,8 +678,10 @@ public final class TaskViewUtils {
                 super.onAnimationStart(animation);
                 if (shown) {
                     for (SurfaceControl leash : auxiliarySurfaces) {
-                        t.setAlpha(leash, 0);
-                        t.show(leash);
+                        if (leash.isValid()) {
+                            t.setAlpha(leash, 0);
+                            t.show(leash);
+                        }
                     }
                     t.apply();
                 }
@@ -688,7 +692,9 @@ public final class TaskViewUtils {
                 super.onAnimationEnd(animation);
                 if (!shown) {
                     for (SurfaceControl leash : auxiliarySurfaces) {
-                        t.hide(leash);
+                        if (leash.isValid()) {
+                            t.hide(leash);
+                        }
                     }
                     t.apply();
                 }

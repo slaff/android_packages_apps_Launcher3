@@ -133,7 +133,7 @@ public final class LauncherActivityInterface extends
             }
         };
 
-        BaseQuickstepLauncher launcher = factory.initUI();
+        BaseQuickstepLauncher launcher = factory.initBackgroundStateUI();
         // Since all apps is not visible, we can safely reset the scroll position.
         // This ensures then the next swipe up to all-apps starts from scroll 0.
         launcher.getAppsView().reset(false /* animate */);
@@ -245,7 +245,11 @@ public final class LauncherActivityInterface extends
 
     private void notifyRecentsOfOrientation(RotationTouchHelper rotationTouchHelper) {
         // reset layout on swipe to home
-        RecentsView recentsView = getCreatedActivity().getOverviewPanel();
+        Launcher launcher = getCreatedActivity();
+        if (launcher == null) {
+            return;
+        }
+        RecentsView recentsView = launcher.getOverviewPanel();
         recentsView.setLayoutRotation(rotationTouchHelper.getCurrentActiveRotation(),
                 rotationTouchHelper.getDisplayRotation());
     }

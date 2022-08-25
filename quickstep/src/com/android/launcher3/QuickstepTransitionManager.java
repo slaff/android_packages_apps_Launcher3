@@ -27,6 +27,7 @@ import static com.android.launcher3.LauncherAnimUtils.SCALE_PROPERTY;
 import static com.android.launcher3.LauncherAnimUtils.VIEW_BACKGROUND_COLOR;
 import static com.android.launcher3.LauncherState.ALL_APPS;
 import static com.android.launcher3.LauncherState.BACKGROUND_APP;
+import static com.android.launcher3.LauncherState.NORMAL;
 import static com.android.launcher3.LauncherState.OVERVIEW;
 import static com.android.launcher3.Utilities.mapBoundToRange;
 import static com.android.launcher3.Utilities.postAsyncCallback;
@@ -40,11 +41,10 @@ import static com.android.launcher3.config.FeatureFlags.ENABLE_BACK_SWIPE_HOME_A
 import static com.android.launcher3.config.FeatureFlags.ENABLE_SCRIM_FOR_APP_LAUNCH;
 import static com.android.launcher3.config.FeatureFlags.KEYGUARD_ANIMATION;
 import static com.android.launcher3.config.FeatureFlags.SEPARATE_RECENTS_ACTIVITY;
-import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_TRANSITIONS;
 import static com.android.launcher3.model.data.ItemInfo.NO_MATCHING_ID;
 import static com.android.launcher3.statehandlers.DepthController.DEPTH;
-import static com.android.launcher3.util.DisplayController.getSingleFrameMs;
 import static com.android.launcher3.testing.TestProtocol.BAD_STATE;
+import static com.android.launcher3.util.window.RefreshRateTracker.getSingleFrameMs;
 import static com.android.launcher3.views.FloatingIconView.SHAPE_PROGRESS_DURATION;
 import static com.android.launcher3.views.FloatingIconView.getFloatingIconView;
 import static com.android.quickstep.TaskViewUtils.findTaskViewToLaunch;
@@ -103,7 +103,6 @@ import com.android.launcher3.taskbar.LauncherTaskbarUIController;
 import com.android.launcher3.touch.PagedOrientationHandler;
 import com.android.launcher3.util.ActivityOptionsWrapper;
 import com.android.launcher3.util.DynamicResource;
-import com.android.launcher3.util.MultiValueAlpha.AlphaProperty;
 import com.android.launcher3.util.ObjectWrapper;
 import com.android.launcher3.util.RunnableList;
 import com.android.launcher3.util.Themes;
@@ -192,9 +191,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
     private static final int WIDGET_CROSSFADE_DURATION_MILLIS = 125;
 
     protected final BaseQuickstepLauncher mLauncher;
-
     private final DragLayer mDragLayer;
-    private final AlphaProperty mDragLayerAlpha;
 
     final Handler mHandler;
 
@@ -237,7 +234,6 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
     public QuickstepTransitionManager(Context context) {
         mLauncher = Launcher.cast(Launcher.getLauncher(context));
         mDragLayer = mLauncher.getDragLayer();
-        mDragLayerAlpha = mDragLayer.getAlphaProperty(ALPHA_INDEX_TRANSITIONS);
         mHandler = new Handler(Looper.getMainLooper());
         mDeviceProfile = mLauncher.getDeviceProfile();
 
@@ -483,6 +479,9 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 ? new float[]{1, mContentScale}
                 : new float[]{mContentScale, 1};
 
+        // Pause expensive view updates as they can lead to layer thrashing and skipped frames.
+        mLauncher.pauseExpensiveViewUpdates();
+
         if (mLauncher.isInState(ALL_APPS)) {
             // All Apps in portrait mode is full screen, so we only animate AllAppsContainerView.
             final View appsView = mLauncher.getAppsView();
@@ -581,9 +580,6 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 }
             }
 
-            // Pause page indicator animations as they lead to layer trashing.
-            mLauncher.getWorkspace().getPageIndicator().pauseAnimations();
-
             endListener = () -> {
                 viewsToAnimate.forEach(view -> {
                     SCALE_PROPERTY.set(view, 1f);
@@ -592,7 +588,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 if (scrimEnabled) {
                     mLauncher.getScrimView().setBackgroundColor(Color.TRANSPARENT);
                 }
-                mLauncher.getWorkspace().getPageIndicator().skipAnimationsToEnd();
+                mLauncher.resumeExpensiveViewUpdates();
             };
         }
 
@@ -1196,6 +1192,19 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
         return false;
     }
 
+    private boolean hasMultipleTargetsWithMode(RemoteAnimationTargetCompat[] targets, int mode) {
+        int numTargets = 0;
+        for (RemoteAnimationTargetCompat target : targets) {
+            if (target.mode == mode) {
+                numTargets++;
+            }
+            if (numTargets > 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return Runner that plays when user goes to Launcher
      * ie. pressing home, swiping up from nav bar.
@@ -1561,15 +1570,6 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 return;
             }
 
-            if (!mLauncher.hasBeenResumed()) {
-                // If launcher is not resumed, wait until new async-frame after resume
-                mLauncher.addOnResumeCallback(() ->
-                        postAsyncCallback(mHandler, () ->
-                                onCreateAnimation(transit, appTargets, wallpaperTargets,
-                                        nonAppTargets, result)));
-                return;
-            }
-
             if (mLauncher.hasSomeInvisibleFlag(PENDING_INVISIBLE_BY_WALLPAPER_ANIMATION)) {
                 mLauncher.addForceInvisibleFlag(INVISIBLE_BY_PENDING_FLAGS);
                 mLauncher.getStateManager().moveToRestState();
@@ -1590,7 +1590,8 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 View launcherView = findLauncherView(appTargets);
                 boolean playFallBackAnimation = (launcherView == null
                         && launcherIsForceInvisibleOrOpening)
-                        || mLauncher.getWorkspace().isOverlayShown();
+                        || mLauncher.getWorkspace().isOverlayShown()
+                        || hasMultipleTargetsWithMode(appTargets, MODE_CLOSING);
 
                 boolean playWorkspaceReveal = true;
                 boolean skipAllAppsScale = false;
@@ -1606,6 +1607,12 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                     if (!mLauncher.isInState(LauncherState.ALL_APPS)) {
                         anim.play(new StaggeredWorkspaceAnim(mLauncher, velocity.y,
                                 true /* animateOverviewScrim */, launcherView).getAnimators());
+
+                  	 if (!areAllTargetsTranslucent(appTargets)) {
+                   	     anim.play(ObjectAnimator.ofFloat(mLauncher.getDepthController(), DEPTH,
+                           	     BACKGROUND_APP.getDepth(mLauncher), NORMAL.getDepth(mLauncher)));
+                   	 }
+
                         // We play StaggeredWorkspaceAnim as a part of the closing window animation.
                         playWorkspaceReveal = false;
                     } else {

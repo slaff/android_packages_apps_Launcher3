@@ -188,14 +188,6 @@ public abstract class SwipeUpAnimationLogic implements
         public void onCancel() { }
 
         /**
-         * @return {@code true} if this factory supports animating an Activity to PiP window on
-         * swiping up to home.
-         */
-        public boolean supportSwipePipToHome() {
-            return false;
-        }
-
-        /**
          * @param progress The progress of the animation to the home screen.
          * @return The current alpha to set on the animating app window.
          */
@@ -280,6 +272,13 @@ public abstract class SwipeUpAnimationLogic implements
         RectF cropRectF = new RectF(taskViewSimulator.getCurrentCropRect());
         // Move the startRect to Launcher space as floatingIconView runs in Launcher
         Matrix windowToHomePositionMap = new Matrix();
+
+        // If the start rect ends up overshooting too much to the left/right offscreen, bring it
+        // back to fullscreen. This can happen when the recentsScroll value isn't aligned with
+        // the pageScroll value for a given taskView, see b/228829958#comment12
+        mRemoteTargetHandles[0].getTaskViewSimulator().getOrientationState().getOrientationHandler()
+                .fixBoundsForHomeAnimStartRect(startRect, mDp);
+
         homeToWindowPositionMap.invert(windowToHomePositionMap);
         windowToHomePositionMap.mapRect(startRect);
 

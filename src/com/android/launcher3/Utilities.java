@@ -155,6 +155,12 @@ public final class Utilities {
     public static final String KEY_DOCK_THEME = "pref_dock_theme";
     public static final String KEY_SEARCH_RADIUS = "pref_search_radius_size";
     public static final String KEY_STATUS_BAR = "pref_show_statusbar";
+    public static final String KEY_ALLOW_WALLPAPER_ZOOMING = "pref_allow_wallpaper_zooming";
+    public static final String KEY_RECENTS_OPACITY = "pref_recents_opacity";
+    public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
+    public static final String KEY_BLUR_DEPTH = "pref_blur_depth";
+    public static final String KEY_RECENTS_MEMINFO = "pref_recents_meminfo";
+    public static final String KEY_SHOW_HOTSEAT_BG = "pref_show_hotseat_bg";
 
     /**
      * Returns true if theme is dark.
@@ -945,5 +951,37 @@ public final class Utilities {
     public static boolean showStatusbarEnabled(Context context) {
         SharedPreferences prefs = getPrefs(context.getApplicationContext());
         return prefs.getBoolean(KEY_STATUS_BAR, true);
+    }
+
+    public static boolean canZoomWallpaper(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getBoolean(KEY_ALLOW_WALLPAPER_ZOOMING, true);
+    }
+
+
+    public static int getRecentsOpacity(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getInt(KEY_RECENTS_OPACITY, 40);
+    }
+
+    public static int getAllAppsOpacity(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getInt(KEY_APP_DRAWER_OPACITY, 80);
+    }
+
+    public static int getBlurRadius(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getInt(KEY_BLUR_DEPTH,
+                (int) context.getResources().getDimension(R.dimen.max_depth_blur_radius));
+    }
+
+    public static boolean isShowMeminfo(Context context) {
+    	SharedPreferences prefs = getPrefs(context.getApplicationContext());
+    	return prefs.getBoolean(KEY_RECENTS_MEMINFO, false);
+   }
+
+    public static boolean isHotseatBgEnabled(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getBoolean(KEY_SHOW_HOTSEAT_BG, false);
     }
 }

@@ -138,6 +138,9 @@ public class DepthController implements StateHandler<LauncherState>,
      * @see android.service.wallpaper.WallpaperService.Engine#onZoomChanged(float)
      */
     private float mDepth;
+
+    private boolean mRestoreDepth;
+
     /**
      * Last blur value, in pixels, that was applied.
      * For debugging purposes.
@@ -165,9 +168,22 @@ public class DepthController implements StateHandler<LauncherState>,
         mLauncher = l;
     }
 
+    public void onRestoreState(float depth) {
+        mDepth = depth;
+        onResume();
+    }
+
+    public float getCurrentDepth() {
+        return mDepth;
+    }
+
+    public void onResume() {
+        mRestoreDepth = true;
+    }
+
     private void ensureDependencies() {
         if (mWallpaperManager == null) {
-            mMaxBlurRadius = mLauncher.getResources().getInteger(R.integer.max_depth_blur_radius);
+            mMaxBlurRadius = Utilities.getBlurRadius(mLauncher);
             mWallpaperManager = new WallpaperManagerCompat(mLauncher);
         }
 
@@ -178,7 +194,8 @@ public class DepthController implements StateHandler<LauncherState>,
                     // To handle the case where window token is invalid during last setDepth call.
                     IBinder windowToken = mLauncher.getRootView().getWindowToken();
                     if (windowToken != null) {
-                        mWallpaperManager.setWallpaperZoomOut(windowToken, mDepth);
+                        mWallpaperManager.setWallpaperZoomOut(windowToken,
+                            Utilities.canZoomWallpaper(mLauncher) ? mDepth : 1);
                     }
                     onAttached();
                 }
@@ -286,14 +303,20 @@ public class DepthController implements StateHandler<LauncherState>,
         // Round out the depth to dedupe frequent, non-perceptable updates
         int depthI = (int) (depth * 256);
         float depthF = depthI / 256f;
-        if (Float.compare(mDepth, depthF) == 0) {
+        if (Float.compare(mDepth, depthF) == 0 && !mRestoreDepth) {
             return;
         }
+        mRestoreDepth = false;
         dispatchTransactionSurface(depthF);
         mDepth = depthF;
     }
 
     public void onOverlayScrollChanged(float progress) {
+        // Add some padding to the progress, such we don't change the depth on the last frames of
+        // the animation. It's possible that a user flinging the feed quickly would scroll
+        // horizontally by accident, causing the device to enter client composition unnecessarily.
+        progress = Math.min(progress * 1.1f, 1f);
+
         // Round out the progress to dedupe frequent, non-perceptable updates
         int progressI = (int) (progress * 256);
         float progressF = Utilities.boundToRange(progressI / 256f, 0f, 1f);
@@ -313,7 +336,8 @@ public class DepthController implements StateHandler<LauncherState>,
         depth = Math.max(depth, mOverlayScrollProgress);
         IBinder windowToken = mLauncher.getRootView().getWindowToken();
         if (windowToken != null) {
-            mWallpaperManager.setWallpaperZoomOut(windowToken, depth);
+            mWallpaperManager.setWallpaperZoomOut(windowToken,
+                Utilities.canZoomWallpaper(mLauncher) ? mDepth : 1);
         }
 
         if (supportsBlur) {

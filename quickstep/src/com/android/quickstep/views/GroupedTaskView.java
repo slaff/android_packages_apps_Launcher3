@@ -242,6 +242,7 @@ public class GroupedTaskView extends TaskView {
         mIconView2.setDrawableSize(iconDrawableSize, iconDrawableSize);
         mIconView2.setRotation(getPagedOrientationHandler().getDegreesRotated());
         updateIconPlacement();
+        updateSecondaryDwbPlacement();
     }
 
     private void updateIconPlacement() {
@@ -255,7 +256,15 @@ public class GroupedTaskView extends TaskView {
 
         getPagedOrientationHandler().setSplitIconParams(mIconView, mIconView2,
                 taskIconHeight, mSnapshotView.getMeasuredWidth(), mSnapshotView.getMeasuredHeight(),
-                isRtl, deviceProfile, mSplitBoundsConfig);
+                getMeasuredHeight(), getMeasuredWidth(), isRtl, deviceProfile,
+                mSplitBoundsConfig);
+    }
+
+    private void updateSecondaryDwbPlacement() {
+        if (mSecondaryTask == null) {
+            return;
+        }
+        mDigitalWellBeingToast2.initialize(mSecondaryTask);
     }
 
     @Override

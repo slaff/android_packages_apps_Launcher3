@@ -113,6 +113,7 @@ import com.android.launcher3.util.WallpaperOffsetInterpolator;
 import com.android.launcher3.widget.LauncherAppWidgetHost;
 import com.android.launcher3.widget.LauncherAppWidgetHost.ProviderChangedListener;
 import com.android.launcher3.widget.LauncherAppWidgetHostView;
+import com.android.launcher3.widget.NavigableAppWidgetHostView;
 import com.android.launcher3.widget.PendingAddShortcutInfo;
 import com.android.launcher3.widget.PendingAddWidgetInfo;
 import com.android.launcher3.widget.PendingAppWidgetHostView;
@@ -146,6 +147,8 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     /** The value that {@link #mTransitionProgress} must be greater than for
      * {@link #isFinishedSwitchingState()} ()} to return true. */
     private static final float FINISHED_SWITCHING_STATE_TRANSITION_PROGRESS = 0.5f;
+
+    private static final float SIGNIFICANT_MOVE_SCREEN_WIDTH_PERCENTAGE = 0.15f;
 
     private static final boolean ENFORCE_DRAG_EVENT_ORDER = false;
 
@@ -1334,7 +1337,9 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
             @Override
             public void run() {
                 final Point size = LauncherAppState.getIDP(getContext()).defaultWallpaperSize;
-                if (size.x != mWallpaperManager.getDesiredMinimumWidth()
+                if (!mWallpaperManager.isWallpaperSupported()) {
+                    mWallpaperManager.suggestDesiredDimensions(0, 0);
+                } else if (size.x != mWallpaperManager.getDesiredMinimumWidth()
                         || size.y != mWallpaperManager.getDesiredMinimumHeight()) {
                     mWallpaperManager.suggestDesiredDimensions(size.x, size.y);
                 }
@@ -2831,7 +2836,8 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
     }
 
     private void getFinalPositionForDropAnimation(int[] loc, float[] scaleXY,
-            DragView dragView, CellLayout layout, ItemInfo info, int[] targetCell, boolean scale) {
+            DragView dragView, CellLayout layout, ItemInfo info, int[] targetCell, boolean scale,
+            final View finalView) {
         // Now we animate the dragView, (ie. the widget or shortcut preview) into its final
         // location and size on the home screen.
         int spanX = info.spanX;
@@ -2840,6 +2846,14 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         Rect r = estimateItemPosition(layout, targetCell[0], targetCell[1], spanX, spanY);
         if (info.itemType == LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET) {
             DeviceProfile profile = mLauncher.getDeviceProfile();
+            if (profile.shouldInsetWidgets() && finalView instanceof NavigableAppWidgetHostView) {
+                Rect widgetPadding = new Rect();
+                ((NavigableAppWidgetHostView) finalView).getWidgetInset(profile, widgetPadding);
+                r.left -= widgetPadding.left;
+                r.right += widgetPadding.right;
+                r.top -= widgetPadding.top;
+                r.bottom += widgetPadding.bottom;
+            }
             Utilities.shrinkRect(r, profile.appWidgetScale.x, profile.appWidgetScale.y);
         }
 
@@ -2886,7 +2900,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         float scaleXY[] = new float[2];
         boolean scalePreview = !(info instanceof PendingAddShortcutInfo);
         getFinalPositionForDropAnimation(finalPos, scaleXY, dragView, cellLayout, info, mTargetCell,
-                scalePreview);
+                scalePreview, finalView);
 
         Resources res = mLauncher.getResources();
         final int duration = res.getInteger(R.integer.config_dropAnimMaxDuration) - 200;
@@ -3229,7 +3243,11 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         }
     }
 
-    private View mapOverCellLayout(CellLayout layout, ItemOperator op) {
+    /**
+     * Perform {param operator} over all the items in a given {param layout}.
+     * @return The first item that satisfies the operator or null.
+     */
+    public View mapOverCellLayout(CellLayout layout, ItemOperator operator) {
         // TODO(b/128460496) Potential race condition where layout is not yet loaded
         if (layout == null) {
             return null;
@@ -3239,7 +3257,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         final int itemCount = container.getChildCount();
         for (int itemIdx = 0; itemIdx < itemCount; itemIdx++) {
             View item = container.getChildAt(itemIdx);
-            if (op.evaluate((ItemInfo) item.getTag(), item)) {
+            if (operator.evaluate((ItemInfo) item.getTag(), item)) {
                 return item;
             }
         }
@@ -3392,6 +3410,17 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
             return getContext().getString(R.string.home_screen);
         }
         return getContext().getString(R.string.workspace_scroll_format, page + 1, nScreens);
+    }
+
+    @Override
+    protected boolean isSignificantMove(float absoluteDelta, int pageOrientedSize) {
+        DeviceProfile deviceProfile = mLauncher.getDeviceProfile();
+        if (!deviceProfile.isTablet) {
+            return super.isSignificantMove(absoluteDelta, pageOrientedSize);
+        }
+
+        return absoluteDelta
+                > deviceProfile.availableWidthPx * SIGNIFICANT_MOVE_SCREEN_WIDTH_PERCENTAGE;
     }
 
     /**

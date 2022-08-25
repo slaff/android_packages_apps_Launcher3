@@ -49,6 +49,7 @@
     <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="lineageos.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
 
     <!--
     Permissions required for read/write access to the workspace data. These permission name
@@ -189,6 +190,14 @@
         <activity
             android:name="com.android.launcher3.settings.SettingsMisc"
             android:label="@string/misc_category_title"
+            android:theme="@style/HomeSettings.Theme"
+            android:exported="true"
+            android:autoRemoveFromRecents="true" />
+
+        <!-- Recents -->
+        <activity
+            android:name="com.android.launcher3.settings.SettingsRecents"
+            android:label="@string/recents_category_title"
             android:theme="@style/HomeSettings.Theme"
             android:exported="true"
             android:autoRemoveFromRecents="true" />
