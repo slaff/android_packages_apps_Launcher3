@@ -122,4 +122,14 @@
     <!-- Hotseat Background -->
     <string name="hotseat_bg_title">Tło Docka</string>
     <string name="hotseat_bg_summary">Dodaje przezroczyste tło dla Doka</string>
+    <!-- AppInfo -->
+    <string name="app_info_subtext">Przesuń w dół, aby zamknąć informacje o aplikacji</string>
+    <string name="app_info_source">Źródło</string>
+    <string name="app_info_source_system">System</string>
+    <string name="app_info_last_update">Ostatnia aktualizacja</string>
+    <string name="app_info_version">Wersja</string>
+    <string name="app_info_more">Więcej</string>
+    <!-- All apps themed icons -->
+    <string name="pref_themed_icons_title">Ikony dostosowane do motywu</string>
+    <string name="pref_themed_icons_summary">Dopasuj ikony dostosowane do motywu na ekranie głównym</string>
 </resources>

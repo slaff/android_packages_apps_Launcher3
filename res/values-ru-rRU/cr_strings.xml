@@ -70,7 +70,7 @@
     <!-- Recents -->
     <string name="action_lens">Объектив</string>
     <!-- Homescreen Statusbar -->
-    <string name="show_statusbar_title">Статус бар</string>
+    <string name="show_statusbar_title">Строка состояния</string>
     <!-- Suggestions -->
     <string name="suggestion_pref_screen_title">Рекомендации</string>
     <string name="suggestion_pref_screen_desc">Рекомендации в списке всех приложений и на главном экране</string>
@@ -122,4 +122,14 @@
     <!-- Hotseat Background -->
     <string name="hotseat_bg_title">Фон нижней панели</string>
     <string name="hotseat_bg_summary">Полупрозрачный фон нижней панели приложений</string>
+    <!-- AppInfo -->
+    <string name="app_info_subtext">Смахните вниз, чтобы закрыть информацию о приложении</string>
+    <string name="app_info_source">Источник</string>
+    <string name="app_info_source_system">Система</string>
+    <string name="app_info_last_update">Последнее обновление</string>
+    <string name="app_info_version">Версия</string>
+    <string name="app_info_more">Ещё</string>
+    <!-- All apps themed icons -->
+    <string name="pref_themed_icons_title">Тематические значки</string>
+    <string name="pref_themed_icons_summary">Следовать тематическим значкам, которые используются на главном экране</string>
 </resources>
